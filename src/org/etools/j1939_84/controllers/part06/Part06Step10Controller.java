@@ -83,7 +83,7 @@ public class Part06Step10Controller extends StepController {
         // 6.6.10.2.b. Fail if any ECU reports time with MIL on greater than 0 minute, and did not report a DTC in its
         // DM12 response.
         packets.stream()
-               .filter(p -> p.getMinutesWhileMILIsActivated() > 0)
+               .filter(p -> p.getMinutesWhileMILIsActivated() > 0 && p.getMinutesWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE)
                .filter(p -> !hasDM12DTC(p.getSourceAddress()))
                .map(ParsedPacket::getModuleName)
                .forEach(moduleName -> addFailure("6.6.10.2.b - " + moduleName
@@ -98,7 +98,7 @@ public class Part06Step10Controller extends StepController {
         checkForNACKsDS(packets, filterAcks(dsResults), "6.6.10.2.d");
 
         // 6.6.10.3.a. Warn if no ECU reports time with MIL on (SPN 3295) greater than 0 minute.
-        boolean noMilOnTime = packets.stream().noneMatch(p -> p.getMinutesWhileMILIsActivated() > 0);
+        boolean noMilOnTime = packets.stream().noneMatch(p -> p.getMinutesWhileMILIsActivated() > 0 && p.getMinutesWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE);
         if (noMilOnTime) {
             addWarning("6.6.10.3.a - No ECU reported time with MIL on > 0 minutes");
         }

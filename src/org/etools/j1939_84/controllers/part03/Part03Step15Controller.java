@@ -16,6 +16,7 @@ import org.etools.j1939_84.modules.EngineSpeedModule;
 import org.etools.j1939_84.modules.VehicleInformationModule;
 import org.etools.j1939tools.j1939.packets.AcknowledgmentPacket;
 import org.etools.j1939tools.j1939.packets.DM21DiagnosticReadinessPacket;
+import org.etools.j1939tools.j1939.packets.ParsedPacket;
 import org.etools.j1939tools.modules.CommunicationsModule;
 import org.etools.j1939tools.modules.DateTimeModule;
 
@@ -75,12 +76,12 @@ public class Part03Step15Controller extends StepController {
                                                                                    // 6.3.15.2.a. Fail if any ECU
                                                                                    // reports distance (SPN 3069) or
                                                                                    // time (SPN 3295) with MIL on > 0.
-                                                                                   if (dm21.getKmWhileMILIsActivated() > 0) {
+                                                                                   if (dm21.getKmWhileMILIsActivated() > 0 && dm21.getKmWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE) {
                                                                                        addFailure("6.3.15.2.a - OBD ECU "
                                                                                                + dm21.getModuleName()
                                                                                                + " reported active distance > 0");
                                                                                    }
-                                                                                   if (dm21.getMinutesWhileMILIsActivated() > 0) {
+                                                                                   if (dm21.getMinutesWhileMILIsActivated() > 0 && dm21.getMinutesWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE) {
                                                                                        addFailure("6.3.15.2.a - OBD ECU "
                                                                                                + dm21.getModuleName()
                                                                                                + " reported active time > 0");

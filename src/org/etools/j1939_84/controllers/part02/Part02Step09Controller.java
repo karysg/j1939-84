@@ -70,7 +70,7 @@ public class Part02Step09Controller extends StepController {
 
         // 6.2.9.2 a. Fail if any ECU reports > 0 distance SCC (SPN 3294).
         globalPackets.stream()
-                     .filter(p -> p.getKmSinceDTCsCleared() > 0)
+                     .filter(p -> p.getKmSinceDTCsCleared() > 0 && p.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                      .forEach(p -> {
                          addFailure("6.2.9.2.a - " + getAddressName(p.getSourceAddress())
                                  + " reported > 0 distance SCC (SPN 3294)");
@@ -93,7 +93,7 @@ public class Part02Step09Controller extends StepController {
         globalPackets.stream()
                      .filter(p -> {
                          double value = p.getMinutesWhileMILIsActivated();
-                         return value > 0 && value < 0xFF00;
+                         return (value > 0 && value < 0xFF00) || value != ParsedPacket.NOT_AVAILABLE;
                      })
                      .forEach(p -> {
                          addFailure("6.2.9.2.c - " + getAddressName(p.getSourceAddress())
@@ -157,8 +157,8 @@ public class Part02Step09Controller extends StepController {
                                        + moduleName);
                 }
 
-                if (p.getMinutesSinceDTCsCleared() > (globalPacket.getMinutesSinceDTCsCleared() + 1) ||
-                        p.getMinutesSinceDTCsCleared() < globalPacket.getMinutesSinceDTCsCleared()){
+                if (p.getMinutesSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE && (p.getMinutesSinceDTCsCleared() > (globalPacket.getMinutesSinceDTCsCleared() + 1) ||
+                        p.getMinutesSinceDTCsCleared() < globalPacket.getMinutesSinceDTCsCleared())){
                     String moduleName = getAddressName(p.getSourceAddress());
                     addFailure("6.2.9.4.a.i - Time Since DTCs cleared is more than 1 minute greater than global request from "
                                        + moduleName);

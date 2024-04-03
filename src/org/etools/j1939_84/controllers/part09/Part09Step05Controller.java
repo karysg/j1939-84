@@ -69,7 +69,7 @@ public class Part09Step05Controller extends StepController {
 
         // 6.9.5.2.a. Fail if any ECU reports distance SCC (SPN 3294) > 0.
         packets.stream()
-               .filter(p -> p.getKmSinceDTCsCleared() > 0)
+               .filter(p -> p.getKmSinceDTCsCleared() > 0 && p.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                .map(ParsedPacket::getModuleName)
                .forEach(moduleName -> {
                    addFailure("6.9.5.2.a - " + moduleName + " reported distance SCC > 0");
@@ -96,14 +96,14 @@ public class Part09Step05Controller extends StepController {
 
         // 6.9.5.3.a. Warn if more than one ECU reports time SCC > 0 and times reported differ by > 1 minute
         var max = packets.stream()
-                         .filter(p -> p.getMinutesSinceDTCsCleared() > 0)
+                         .filter(p -> p.getMinutesSinceDTCsCleared() > 0 && p.getMinutesSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                          .mapToDouble(DM21DiagnosticReadinessPacket::getMinutesSinceDTCsCleared)
                          .max()
                          .stream()
                          .findFirst()
                          .orElse(0);
         var min = packets.stream()
-                         .filter(p -> p.getMinutesSinceDTCsCleared() > 0)
+                         .filter(p -> p.getMinutesSinceDTCsCleared() > 0 && p.getMinutesSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                          .mapToDouble(DM21DiagnosticReadinessPacket::getMinutesSinceDTCsCleared)
                          .min()
                          .stream()

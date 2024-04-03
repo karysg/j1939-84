@@ -80,7 +80,7 @@ public class Part11Step12Controller extends StepController {
 
         // 6.11.12.2.b. Fail if distance SCC (SPN 3294) is > 0.
         packets.stream()
-               .filter(p -> p.getKmSinceDTCsCleared() > 0)
+               .filter(p -> p.getKmSinceDTCsCleared() > 0 && p.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                .map(ParsedPacket::getModuleName)
                .forEach(moduleName -> {
                    addFailure("6.11.12.2.b - " + moduleName + " reported distance SCC is > 0");

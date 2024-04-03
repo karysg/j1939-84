@@ -62,7 +62,7 @@ public class Part12Step07Controller extends StepController {
 
         // 6.12.7.2.a. Fail if any ECU reports distance SCC (SPN 3294) > 0.
         dm21s.stream()
-             .filter(p -> p.getKmSinceDTCsCleared() > 0)
+             .filter(p -> p.getKmSinceDTCsCleared() > 0 && p.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
              .map(ParsedPacket::getModuleName)
              .forEach(moduleName -> {
                  addFailure("6.12.7.2.a - " + moduleName + " reported distance SCC > 0");

@@ -84,7 +84,7 @@ public class Part01Step11Controller extends StepController {
         } else {
             // 6.1.11.2.a. Fail if any ECU reports distance with MIL on (SP 3069) is not zero.
             globalPackets.stream()
-                    .filter(packet -> isNotZero(packet.getKmSinceDTCsCleared()))
+                    .filter(packet -> isNotZero(packet.getKmSinceDTCsCleared()) && packet.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                     .map(ParsedPacket::getModuleName)
                     .forEach(moduleName -> {
                         addFailure("6.1.11.2.a - " + moduleName
@@ -93,7 +93,7 @@ public class Part01Step11Controller extends StepController {
 
             // 6.1.11.2.b. Fail if any ECU reports distance SCC (SP 3294) is not zero.
             globalPackets.stream()
-                    .filter(packet -> isNotZero(packet.getKmWhileMILIsActivated()))
+                    .filter(packet -> isNotZero(packet.getKmWhileMILIsActivated()) && packet.getKmWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE)
                     .map(ParsedPacket::getModuleName)
                     .forEach(moduleName -> {
                         addFailure("6.1.11.2.b - " + moduleName + " reported distance SCC (SP 3294) is not zero");
@@ -101,7 +101,7 @@ public class Part01Step11Controller extends StepController {
 
             // 6.1.11.2.c. Fail if any ECU reports time with MIL on (SP 3295) is not zero (if supported)
             globalPackets.stream()
-                    .filter(packet -> isNotZero(packet.getMinutesWhileMILIsActivated()))
+                    .filter(packet -> isNotZero(packet.getMinutesWhileMILIsActivated()) && packet.getMinutesWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE)
                     .map(ParsedPacket::getModuleName)
                     .forEach(moduleName -> {
                         addFailure("6.1.11.2.c - " + moduleName
@@ -110,7 +110,7 @@ public class Part01Step11Controller extends StepController {
 
             // 6.1.11.2.d. Fail if any ECU reports time SCC (SP 3296) > 1 minute (if supported).
             globalPackets.stream()
-                    .filter(packet -> Double.valueOf(packet.getMinutesSinceDTCsCleared()).intValue() > 1)
+                    .filter(packet -> packet.getMinutesSinceDTCsCleared() != NOT_AVAILABLE && Double.valueOf(packet.getMinutesSinceDTCsCleared()).intValue() > 1)
                     .map(ParsedPacket::getModuleName)
                     .forEach(moduleName -> {
                         addFailure("6.1.11.2.d - " + moduleName + " reported time SCC (SP 3296) > 1 minute");
@@ -128,7 +128,7 @@ public class Part01Step11Controller extends StepController {
 
         // 6.1.11.4.a. Fail if any ECU reports distance with MIL on (SP 3069) is not zero.
         dsPackets.stream()
-                .filter(packet -> isNotZero(packet.getKmSinceDTCsCleared()))
+                .filter(packet -> isNotZero(packet.getKmSinceDTCsCleared()) && packet.getKmSinceDTCsCleared() != ParsedPacket.NOT_AVAILABLE)
                 .map(ParsedPacket::getModuleName)
                 .forEach(moduleName -> {
                     addFailure("6.1.11.4.a - " + moduleName + " reported distance with MIL on (SP 3069) is not zero");
@@ -136,7 +136,7 @@ public class Part01Step11Controller extends StepController {
 
         // 6.1.11.4.b. Fail if any ECU reports distance SCC (SP 3294) is not zero.
         dsPackets.stream()
-                .filter(packet -> isNotZero(packet.getKmWhileMILIsActivated()))
+                .filter(packet -> isNotZero(packet.getKmWhileMILIsActivated()) && packet.getKmWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE)
                 .map(ParsedPacket::getModuleName)
                 .forEach(moduleName -> {
                     addFailure("6.1.11.4.b - " + moduleName + " reported distance SCC (SP 3294) is not zero");
@@ -144,7 +144,7 @@ public class Part01Step11Controller extends StepController {
 
         // 6.1.11.4.c. Fail if any ECU reports time with MIL on (SP 3295) is not zero (if supported)
         dsPackets.stream()
-                .filter(packet -> isNotZero(packet.getMinutesWhileMILIsActivated()))
+                .filter(packet -> isNotZero(packet.getMinutesWhileMILIsActivated()) && packet.getMinutesWhileMILIsActivated() != ParsedPacket.NOT_AVAILABLE)
                 .map(ParsedPacket::getModuleName)
                 .forEach(moduleName -> {
                     addFailure("6.1.11.4.c - " + moduleName + " reported time with MIL on (SP 3295) is not zero");
@@ -152,7 +152,7 @@ public class Part01Step11Controller extends StepController {
 
         // 6.1.11.4.d. Fail if any ECU reports time SCC (SP 3296) > 1 minute (if supported).
         dsPackets.stream()
-                .filter(packet -> Double.valueOf(packet.getMinutesSinceDTCsCleared()).intValue() > 1)
+                .filter(packet -> packet.getMinutesSinceDTCsCleared() != NOT_AVAILABLE && Double.valueOf(packet.getMinutesSinceDTCsCleared()).intValue() > 1)
                 .map(ParsedPacket::getModuleName)
                 .forEach(moduleName -> {
                     addFailure("6.1.11.4.d - " + moduleName + " reported time SCC (SP 3296) > 1 minute");
