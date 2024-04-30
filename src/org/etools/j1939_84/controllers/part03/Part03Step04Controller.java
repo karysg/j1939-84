@@ -110,7 +110,7 @@ public class Part03Step04Controller extends StepController {
             // what that ECU reported in DM6 earlier in this part.
             boolean hasEmissionDTCDifference = modulePackets.stream()
                                                             .anyMatch(p -> {
-                                                                return p.getEmissionRelatedPendingDTCCount() != getDM6DTCSize(p.getSourceAddress());
+                                                                return p.getEmissionRelatedPendingDTCCount() != 0xFF && p.getEmissionRelatedPendingDTCCount() != getDM6DTCSize(p.getSourceAddress());
                                                             });
             if (hasEmissionDTCDifference) {
                 addFailure("6.3.4.2.c - " + moduleName

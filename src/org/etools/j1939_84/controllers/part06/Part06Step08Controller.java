@@ -86,14 +86,14 @@ public class Part06Step08Controller extends StepController {
                        + " reports > 0 for previous MIL on"));
 
         // 6.6.8.2.b. Fail if no ECU reports > 0 for MIL on.
-        boolean noMIL = packets.stream().map(DM29DtcCounts::getEmissionRelatedMILOnDTCCount).noneMatch(mil -> mil > 0);
+        boolean noMIL = packets.stream().map(DM29DtcCounts::getEmissionRelatedMILOnDTCCount).noneMatch(mil -> mil > 0 && mil != 0xFF);
         if (noMIL) {
             addFailure("6.6.8.2.b - No ECU reported > 0 for MIL on");
         }
 
         // 6.6.8.2.c. Fail if any ECU reports a different number for MIL on than what that ECU reported in DM12.
         packets.stream()
-               .filter(p -> p.getEmissionRelatedMILOnDTCCount() != getDM12DTCs(p.getSourceAddress()).size())
+               .filter(p -> p.getEmissionRelatedMILOnDTCCount() != getDM12DTCs(p.getSourceAddress()).size() && p.getEmissionRelatedMILOnDTCCount() != 0xFF)
                .map(ParsedPacket::getModuleName)
                .forEach(moduleName -> {
                    addFailure("6.6.8.2.c - " + moduleName
@@ -103,7 +103,7 @@ public class Part06Step08Controller extends StepController {
         // 6.6.8.2.d. Fail if no ECU reports > 0 for permanent.
         boolean noPerm = packets.stream()
                                 .map(DM29DtcCounts::getEmissionRelatedPermanentDTCCount)
-                                .noneMatch(perm -> perm > 0);
+                                .noneMatch(perm -> perm > 0 && perm != 0xFF);
         if (noPerm) {
             addFailure("6.6.8.2.d - No ECU reported > 0 for permanent");
         }

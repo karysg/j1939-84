@@ -320,7 +320,11 @@ public class SectionA5MessageVerifier extends SectionVerifier {
                                                     && p.getEmissionRelatedMILOnDTCCount() == 0
                                                     && p.getEmissionRelatedPreviouslyMILOnDTCCount() == 0;
 
-                                            return shouldBeReported(verifyIsErased, prevState, currentState);
+                                            boolean isNA = p.getEmissionRelatedPendingDTCCount() == 0xFF
+                                                    && p.getEmissionRelatedMILOnDTCCount() == 0xFF
+                                                    && p.getEmissionRelatedPreviouslyMILOnDTCCount() == 0xFF;
+
+                                            return !isNA && shouldBeReported(verifyIsErased, prevState, currentState);
                                         })
                                         .peek(p -> {
                                             addFailure(listener, section, verifyIsErased, p);

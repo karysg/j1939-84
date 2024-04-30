@@ -83,7 +83,7 @@ public class Part08Step08Controller extends StepController {
         // 6.8.8.2.c. Fail if any ECU reports a different number for MIL on than what that ECU reported in DM12 earlier
         // in this part.
         packets.stream()
-               .filter(p -> p.getEmissionRelatedMILOnDTCCount() != getDM12Count(p.getSourceAddress()))
+               .filter(p -> p.getEmissionRelatedMILOnDTCCount() != getDM12Count(p.getSourceAddress()) && p.getEmissionRelatedMILOnDTCCount() != 0xFF)
                .map(ParsedPacket::getModuleName)
                .forEach(moduleName -> {
                    addFailure("6.8.8.2.c - " + moduleName

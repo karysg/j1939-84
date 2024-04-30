@@ -55,28 +55,28 @@ public class DM29DtcCounts extends GenericPacket {
         if (allPendingDTCCount == -1) {
             parsePacket();
         }
-        return allPendingDTCCount;
+        return allPendingDTCCount;//
     }
 
     public int getEmissionRelatedMILOnDTCCount() {
         if (emissionRelatedMILOnDTCCount == -1) {
             parsePacket();
         }
-        return emissionRelatedMILOnDTCCount;
+        return emissionRelatedMILOnDTCCount;//
     }
 
     public int getEmissionRelatedPendingDTCCount() {
         if (emissionRelatedPendingDTCCount == -1) {
             parsePacket();
         }
-        return emissionRelatedPendingDTCCount;
+        return emissionRelatedPendingDTCCount;//
     }
 
     public int getEmissionRelatedPermanentDTCCount() {
         if (emissionRelatedPermanentDTCCount == -1) {
             parsePacket();
         }
-        return emissionRelatedPermanentDTCCount;
+        return emissionRelatedPermanentDTCCount;//
     }
 
     public int getEmissionRelatedPreviouslyMILOnDTCCount() {
