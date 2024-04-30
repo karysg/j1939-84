@@ -33,6 +33,7 @@ import org.etools.j1939tools.j1939.packets.GenericPacket;
 import org.etools.j1939tools.j1939.packets.IdleOperationPacket;
 import org.etools.j1939tools.j1939.packets.MonitoredSystem;
 import org.etools.j1939tools.j1939.packets.MonitoredSystemStatus;
+import org.etools.j1939tools.j1939.packets.ParsedPacket;
 import org.etools.j1939tools.j1939.packets.ScaledTestResult;
 import org.etools.j1939tools.modules.CommunicationsModule;
 
@@ -210,7 +211,12 @@ public class SectionA5MessageVerifier extends SectionVerifier {
                                                     && prev.getKmSinceDTCsCleared() == 0
                                                     && prev.getMinutesSinceDTCsCleared() == 0;
 
-                                            return shouldBeReported(verifyIsErased, wasErased, isErased);
+                                            boolean isNA = prev.getKmWhileMILIsActivated() == ParsedPacket.NOT_AVAILABLE
+                                                    && prev.getMinutesWhileMILIsActivated() == ParsedPacket.NOT_AVAILABLE
+                                                    && prev.getKmSinceDTCsCleared() == ParsedPacket.NOT_AVAILABLE
+                                                    && prev.getMinutesSinceDTCsCleared() == ParsedPacket.NOT_AVAILABLE;
+
+                                            return !isNA && shouldBeReported(verifyIsErased, wasErased, isErased);
                                         })
                                         .peek(p -> {
                                             addFailure(listener, section, verifyIsErased, p);

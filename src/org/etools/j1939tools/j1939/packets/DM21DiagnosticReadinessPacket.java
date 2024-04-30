@@ -70,7 +70,7 @@ public class DM21DiagnosticReadinessPacket extends GenericPacket {
      * @return miles as a double
      */
     public double getMilesSinceDTCsCleared() {
-        return getKmSinceDTCsCleared() * KM_TO_MILES_FACTOR;
+        return getKmSinceDTCsCleared() == ParsedPacket.NOT_AVAILABLE ? ParsedPacket.NOT_AVAILABLE : getKmSinceDTCsCleared() * KM_TO_MILES_FACTOR;
     }
 
     /**
@@ -80,7 +80,7 @@ public class DM21DiagnosticReadinessPacket extends GenericPacket {
      * @return miles as a double
      */
     public double getMilesWhileMILIsActivated() {
-        return getKmWhileMILIsActivated() * KM_TO_MILES_FACTOR;
+        return getKmWhileMILIsActivated() == ParsedPacket.NOT_AVAILABLE ? ParsedPacket.NOT_AVAILABLE : getKmWhileMILIsActivated() * KM_TO_MILES_FACTOR;
     }
 
     /**

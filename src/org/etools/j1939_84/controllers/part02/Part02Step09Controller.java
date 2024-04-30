@@ -93,7 +93,7 @@ public class Part02Step09Controller extends StepController {
         globalPackets.stream()
                      .filter(p -> {
                          double value = p.getMinutesWhileMILIsActivated();
-                         return (value > 0 && value < 0xFF00) || value != ParsedPacket.NOT_AVAILABLE;
+                         return value > 0 && value < 0xFF00;
                      })
                      .forEach(p -> {
                          addFailure("6.2.9.2.c - " + getAddressName(p.getSourceAddress())
